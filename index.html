@@ -104,6 +104,84 @@ html,body{height:100%;margin:0;background:var(--bg);color:var(--white);-webkit-f
 .input{
   width:100%;padding:10px;border-radius:10px;border:1px solid rgba(255,255,255,0.04);background:transparent;color:var(--white)
 }
+
+/* ============================================= */
+/* ============ MEDIA QUERIES COMPLETAS ========= */
+/* ============================================= */
+
+/* 🟩 CELULARES MUITO PEQUENOS (320–360px) */
+@media (max-width: 360px) {
+  .header .title {
+    font-size: 14px;
+  }
+  .header .subtitle {
+    font-size: 11px;
+  }
+  .card {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  .chat-header-title {
+    font-size: 16px;
+  }
+  .msg {
+    max-width: 90%;
+  }
+  .bot-btn {
+    width: 58px;
+    height: 58px;
+    font-size: 18px;
+  }
+}
+
+/* 🟦 CELULARES PADRÃO (360–414px) */
+@media (max-width: 414px) {
+  .chat-panel {
+    padding-top: 12px;
+  }
+  .chat-header {
+    padding: 12px;
+  }
+  .chat-footer {
+    padding: 10px;
+  }
+  .input {
+    padding: 10px;
+  }
+  .btn-small {
+    padding: 10px 14px !important;
+  }
+}
+
+/* 🟨 iPHONE GRANDE / ANDROID GRANDE (414–480px) */
+@media (max-width: 480px) {
+  .card {
+    padding: 14px;
+  }
+  .msg {
+    max-width: 88%;
+  }
+  .bot-btn {
+    width: 62px;
+    height: 62px;
+  }
+}
+
+/* 🟥 TELAS MUITO GRANDES DE CELULAR (480–540px) */
+@media (max-width: 540px) {
+  .main.container {
+    padding-left: 8px;
+    padding-right: 8px;
+  }
+  .chat-panel {
+    backdrop-filter: blur(10px);
+  }
+  .msg.bot {
+    background: #ffffff17;
+  }
+}
+
+  
 </style>
 </head>
 <body>
