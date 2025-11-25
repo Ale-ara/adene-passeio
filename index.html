@@ -12,9 +12,9 @@
 :root{
   --bg:#070707;
   --card:#0f0f10;
-  --primary:#025E15;      /* sua cor base */
-  --primary-2:#038A28;    /* variação para gradiente */
-  --primary-3:#04A634;    /* tom mais claro para destaque */
+  --primary:#025E15;
+  --primary-2:#038A28;
+  --primary-3:#04A634;
   --muted:#9aa29a;
   --white:#ffffff;
   --glass: rgba(255,255,255,0.03);
@@ -32,8 +32,8 @@ html,body{
 /* ============================================= */
 #loadingScreen {
   position: fixed;
-  top:0; left:0; right:0; bottom:0;
-  background: #000000e6;
+  inset:0;
+  background:#000000e6;
   display:flex;
   flex-direction:column;
   justify-content:center;
@@ -44,9 +44,9 @@ html,body{
 }
 
 #loadingLogo {
-  width:90px;
-  height:90px;
-  border-radius:12px;
+  width:95px;
+  height:95px;
+  border-radius:14px;
   overflow:hidden;
   border:2px solid var(--primary-3);
   box-shadow:0 0 25px rgba(2,94,21,0.45);
@@ -63,8 +63,8 @@ html,body{
 }
 
 .spinner {
-  width:46px;
-  height:46px;
+  width:48px;
+  height:48px;
   border:4px solid #ffffff18;
   border-top:4px solid var(--primary-3);
   border-radius:50%;
@@ -97,7 +97,8 @@ html,body{
 }
 .brand .logo{
   width:56px;height:56px;border-radius:10px;background:#000;display:flex;align-items:center;justify-content:center;
-  overflow:hidden;border:1px solid rgba(255,255,255,0.03);box-shadow:0 8px 30px rgba(0,0,0,0.6)
+  overflow:hidden;border:1px solid rgba(255,255,255,0.03);
+  box-shadow:0 8px 30px rgba(0,0,0,0.6)
 }
 .brand .logo img{width:100%;height:100%;object-fit:cover}
 .header .title{font-size:16px;font-weight:700}
@@ -124,9 +125,6 @@ html,body{
 .btn-small{
   background: linear-gradient(90deg,var(--primary),var(--primary-2));
   color:#fff;border:none;padding:8px 12px;border-radius:10px;font-weight:700;cursor:pointer;box-shadow:var(--accent-shadow)
-}
-.btn-small.ghost{
-  background:transparent;border:1px solid rgba(255,255,255,0.03);color:var(--muted);
 }
 
 /* ============================================= */
@@ -155,7 +153,7 @@ html,body{
 .chat-body{padding:12px;overflow:auto;flex:1;display:flex;flex-direction:column;gap:10px}
 .chat-footer{padding:10px;border-top:1px solid rgba(255,255,255,0.03);display:flex;gap:8px;align-items:center}
 .msg{max-width:78%;padding:10px 12px;border-radius:12px}
-.msg.bot{background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));align-self:flex-start;color:var(--white);border:1px solid rgba(255,255,255,0.02)}
+.msg.bot{background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));align-self:flex-start;color:var(--white)}
 .msg.user{background:linear-gradient(90deg, rgba(2,94,21,0.10), rgba(3,138,40,0.06));align-self:flex-end;color:#fff}
 .choice-btn{background:transparent;border:1px solid rgba(255,255,255,0.06);padding:10px;border-radius:10px;color:var(--white);cursor:pointer}
 .choice-btn.primary{background:linear-gradient(90deg,var(--primary-3),var(--primary-2));color:#fff;border:none;box-shadow:var(--accent-shadow)}
@@ -171,8 +169,8 @@ html,body{
   .card{flex-direction:column;align-items:flex-start}
 }
 .hidden{display:none}
-.center{display:flex;align-items:center;justify-content:center}
 
+/* END CSS */
 </style>
 </head>
 <body>
@@ -193,21 +191,18 @@ html,body{
 <!-- ============================================= -->
 <div class="header">
   <div class="brand">
-    <div class="logo"><img src="https://i.imgur.com/3YB9EVh.jpeg" alt="ADENE logo"></div>
+    <div class="logo"><img src="https://i.imgur.com/3YB9EVh.jpeg"></div>
     <div>
       <div class="title">ADENE — Vila Tiradentes</div>
       <div class="subtitle small">Lista para o Café da Comunhão</div>
     </div>
   </div>
-  <div style="margin-left:auto;display:flex;gap:8px;align-items:center">
-    <button id="refreshBtn" class="btn-small">Atualizar</button>
-  </div>
+  <button id="refreshBtn" class="btn-small">Atualizar</button>
 </div>
 
 <!-- ============================================= -->
 <!-- ==================== LISTA =================== -->
 <!-- ============================================= -->
-
 <div class="main container" role="main">
   <div>
     <div style="display:flex;justify-content:space-between;align-items:end">
@@ -217,9 +212,7 @@ html,body{
       </div>
     </div>
 
-    <div id="listArea" style="margin-top:12px">
-      <!-- cards -->
-    </div>
+    <div id="listArea" style="margin-top:12px"></div>
   </div>
 </div>
 
@@ -231,7 +224,7 @@ html,body{
 <!-- ============================================= -->
 <!-- =================== CHAT PANEL =============== -->
 <!-- ============================================= -->
-<div id="chatPanel" class="chat-panel hidden" aria-hidden="true">
+<div id="chatPanel" class="chat-panel hidden">
   <div class="chat-header">
     <div style="font-weight:800">Ajudante — Café da Comunhão</div>
     <div style="font-size:13px;color:var(--muted)">Toque fora para fechar</div>
@@ -240,7 +233,7 @@ html,body{
   <div id="chatBody" class="chat-body"></div>
 
   <div class="chat-footer">
-    <input id="chatInput" class="input" type="text" placeholder="Escreva..." aria-label="mensagem">
+    <input id="chatInput" class="input" type="text" placeholder="Escreva...">
     <button id="chatSend" class="btn-small">Enviar</button>
   </div>
 </div>
@@ -337,7 +330,9 @@ function renderListCards(dados) {
         <div class="who">${escapeHtml(item.responsavel || '— Vago —')}</div>
         ${
           !item.responsavel 
-          ? `<div style="margin-top:8px"><button class="btn-small" onclick="startFlow_chooseExisting('${escapeAttr(item.item)}','${escapeAttr(item.quantidade||'')}')">Reservar</button></div>` 
+          ? `<div style="margin-top:8px">
+               <button class="btn-small" onclick="startFlow_chooseExisting('${escapeAttr(item.item)}','${escapeAttr(item.quantidade||'')}')">Reservar</button>
+             </div>` 
           : ''
         }
       </div>
@@ -389,13 +384,33 @@ function choice_list() {
   appendBot(html, true);
 }
 
+/* ---------------------------------------------------------- */
+/*  ★★ FUNÇÃO ATUALIZADA: ABRE O CHAT AUTOMATICAMENTE ★★     */
+/* ---------------------------------------------------------- */
 window.startFlow_chooseExisting = function(item, quantidade) {
-  if (chatPanel.classList.contains('hidden')) openChat();
-  appendUser(`Reservar: ${item} ${quantidade ? '— '+quantidade : ''}`);
+
+  // Sempre abrir o chat primeiro
+  if (chatPanel.classList.contains('hidden')) {
+    chatPanel.classList.remove('hidden');
+  }
+
+  // Zera o conteúdo
+  chatBody.innerHTML = "";
+
+  // Mostra seleção
+  appendBot("Você escolheu:");
+  appendBot(`<strong>${escapeHtml(item)}${quantidade ? " — " + escapeHtml(quantidade) : ""}</strong>`, true);
+
+  // Grava item
   state.selected = { item, quantidade };
 
-  appendBot(`Qual o seu nome para registrar?`);
+  // Pergunta nome
+  appendBot("Qual o seu nome para registrar?");
+  
+  // Define fluxo
   state.current = "confirm_name_for_existing";
+
+  chatInput.focus();
 }
 
 /* ---------------- ADICIONAR ITEM NOVO ---------------- */
@@ -443,7 +458,7 @@ function handleSend() {
   }
 
   if (state.current === "confirm_name_for_existing") {
-    appendBot('Registrando...');
+    appendBot("Registrando...");
     assumeExistingItem(state.selected.item, state.selected.quantidade, txt);
     state.current = null;
     return;
@@ -466,7 +481,7 @@ async function assumeExistingItem(item, quantidade, nome) {
     if (j.status === "ok") {
       appendBot("Item reservado com sucesso 🙌");
       carregarLista();
-      setTimeout(closeChat, 700);
+      setTimeout(closeChat, 900);
     } else {
       appendBot("Erro ao reservar: "+(j.msg||'Falha'));
     }
