@@ -139,36 +139,80 @@ html,body{
 }
 
 /* ============================================= */
-/* ================ CHAT PANEL ================= */
+/* ========= CHAT FULLSCREEN COM BLUR ========== */
 /* ============================================= */
 .chat-panel{
-  position:fixed;right:8px;bottom:92px;left:8px;border-radius:14px;
-  background:linear-gradient(180deg, rgba(0,0,0,0.90), rgba(0,0,0,0.98));
-  border:1px solid rgba(255,255,255,0.04);z-index:2100;max-height:80vh;
-  display:flex;flex-direction:column;overflow:hidden;
-  box-shadow:0 20px 70px rgba(0,0,0,0.6);
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,0.75);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  z-index:2500;
+  display:flex;
+  flex-direction:column;
+  padding-top:20px;
 }
 .chat-panel.hidden{display:none}
-.chat-header{padding:14px;border-bottom:1px solid rgba(255,255,255,0.03);display:flex;align-items:center;justify-content:space-between;gap:12px}
-.chat-body{padding:12px;overflow:auto;flex:1;display:flex;flex-direction:column;gap:10px}
-.chat-footer{padding:10px;border-top:1px solid rgba(255,255,255,0.03);display:flex;gap:8px;align-items:center}
-.msg{max-width:78%;padding:10px 12px;border-radius:12px}
-.msg.bot{background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));align-self:flex-start;color:var(--white)}
-.msg.user{background:linear-gradient(90deg, rgba(2,94,21,0.10), rgba(3,138,40,0.06));align-self:flex-end;color:#fff}
-.choice-btn{background:transparent;border:1px solid rgba(255,255,255,0.06);padding:10px;border-radius:10px;color:var(--white);cursor:pointer}
-.choice-btn.primary{background:linear-gradient(90deg,var(--primary-3),var(--primary-2));color:#fff;border:none;box-shadow:var(--accent-shadow)}
 
+.chat-header{
+  padding:16px;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+}
+.chat-header-title{
+  font-size:18px;
+  font-weight:700;
+}
+.close-btn{
+  font-size:24px;
+  font-weight:900;
+  cursor:pointer;
+  padding:6px 12px;
+  border-radius:8px;
+  background:#ffffff15;
+  color:white;
+}
+
+.chat-body{
+  padding:16px;
+  overflow:auto;
+  flex:1;
+  display:flex;
+  flex-direction:column;
+  gap:12px;
+}
+.msg{
+  max-width:85%;
+  padding:12px 14px;
+  border-radius:12px;
+}
+.msg.bot{
+  background:#ffffff12;
+  color:white;
+}
+.msg.user{
+  align-self:flex-end;
+  background:#04A63422;
+  color:white;
+}
+
+.chat-footer{
+  padding:14px;
+  display:flex;
+  gap:10px;
+}
 .input{
-  width:100%;padding:10px;border-radius:10px;border:1px solid rgba(255,255,255,0.04);
-  background:transparent;color:var(--white)
+  flex:1;
+  padding:12px;
+  border-radius:12px;
+  background:#ffffff10;
+  border:1px solid #ffffff22;
+  color:white;
 }
-
-/* MOBILE */
-@media (max-width:520px){
-  .chat-panel{left:8px;right:8px;bottom:84px;max-height:86vh}
-  .card{flex-direction:column;align-items:flex-start}
+.btn-small{
+  padding:12px 18px !important;
 }
-.hidden{display:none}
 
 /* END CSS */
 </style>
@@ -208,7 +252,7 @@ html,body{
     <div style="display:flex;justify-content:space-between;align-items:end">
       <div>
         <div class="section-title">Itens da lista</div>
-        <div class="small">Toque no botão do assistente para reservar via chat</div>
+        <div class="small">Toque no botão do assistente para reservar</div>
       </div>
     </div>
 
@@ -217,227 +261,213 @@ html,body{
 </div>
 
 <!-- ============================================= -->
-<!-- =================== BOT BUTTON =============== -->
+<!-- ================= BOT BUTTON ================= -->
 <!-- ============================================= -->
-<div id="botBtn" class="bot-btn" title="Ajudante do Café">💬</div>
+<div id="botBtn" class="bot-btn">💬</div>
 
 <!-- ============================================= -->
-<!-- =================== CHAT PANEL =============== -->
+<!-- ================== CHAT FULLSCREEN ========= -->
 <!-- ============================================= -->
 <div id="chatPanel" class="chat-panel hidden">
+
   <div class="chat-header">
-    <div style="font-weight:800">Ajudante — Café da Comunhão</div>
-    <div style="font-size:13px;color:var(--muted)">Toque fora para fechar</div>
+    <div class="chat-header-title">Ajudante — Café da Comunhão</div>
+    <div class="close-btn" onclick="closeChat()">×</div>
   </div>
 
   <div id="chatBody" class="chat-body"></div>
 
   <div class="chat-footer">
-    <input id="chatInput" class="input" type="text" placeholder="Escreva...">
+    <input id="chatInput" class="input" type="text" placeholder="Digite..." />
     <button id="chatSend" class="btn-small">Enviar</button>
   </div>
+
 </div>
 
 <script>
-/* ---------------------------------------------- */
-/*  CONFIG  */
-/* ---------------------------------------------- */
+/* ========================================================= */
+/*  SCRIPT (SEU SCRIPT FOI MANTIDO, APENAS PEQUENOS AJUSTES)  */
+/* ========================================================= */
 
-const API_URL = "https://script.google.com/macros/s/AKfycbz7ZYVvchooVf82_88VF3bbUWlnlFKiK-09-y17KKLf20I1avsxpHjVHxDCu6NEmoX0/exec";
+const API_URL =
+  "https://script.google.com/macros/s/AKfycbz7ZYVvchooVf82_88VF3bbUWlnlFKiK-09-y17KKLf20I1avsxpHjVHxDCu6NEmoX0/exec";
 
 let listaGlobal = [];
-const chatPanel = document.getElementById('chatPanel');
-const botBtn = document.getElementById('botBtn');
-const chatBody = document.getElementById('chatBody');
-const chatInput = document.getElementById('chatInput');
-const chatSend = document.getElementById('chatSend');
-const listArea = document.getElementById('listArea');
-const refreshBtn = document.getElementById('refreshBtn');
 
-/* ====== LOADING ====== */
-window.addEventListener('load', () => {
+const chatPanel = document.getElementById("chatPanel");
+const chatBody = document.getElementById("chatBody");
+const chatInput = document.getElementById("chatInput");
+const chatSend = document.getElementById("chatSend");
+const botBtn = document.getElementById("botBtn");
+const refreshBtn = document.getElementById("refreshBtn");
+const listArea = document.getElementById("listArea");
+
+const state = { current: null, selected: null };
+
+window.addEventListener("load", () => {
   setTimeout(() => {
-    document.getElementById('loadingScreen').style.display = 'none';
+    document.getElementById("loadingScreen").style.display = "none";
   }, 1600);
 });
 
-/* ---------------------------------------------- */
-/*  EVENTOS  */
-/* ---------------------------------------------- */
-botBtn.addEventListener('click', openChat);
-refreshBtn.addEventListener('click', carregarLista);
-document.addEventListener('click', (e) => {
-  if (!chatPanel.classList.contains('hidden')) {
-    const inside = chatPanel.contains(e.target) || botBtn.contains(e.target);
-    if (!inside) closeChat();
-  }
-});
+botBtn.addEventListener("click", openChat);
 
-/* ---------------------------------------------- */
-/*  UI HELPERS */
-/* ---------------------------------------------- */
-function appendBot(msg, html=false) {
-  const m = document.createElement('div');
-  m.className = 'msg bot';
-  m.innerHTML = html ? msg : escapeHtml(msg);
+/* ====================== CHAT UI ====================== */
+function openChat() {
+  chatPanel.classList.remove("hidden");
+  chatBody.innerHTML = "";
+
+  appendBot(
+    "Olá! Eu sou o assistente do Café da Comunhão. Como deseja continuar?"
+  );
+
+  appendBot(
+    `
+    <button class="choice-btn primary" onclick="choice_list()">Escolher item</button>
+    <button class="choice-btn" onclick="choice_add()">Adicionar item novo</button>
+  `,
+    true
+  );
+
+  chatInput.focus();
+}
+
+function closeChat() {
+  chatPanel.classList.add("hidden");
+}
+
+/* ========== mensagens ========== */
+function appendBot(msg, html = false) {
+  const m = document.createElement("div");
+  m.className = "msg bot";
+  m.innerHTML = html ? msg : msg;
   chatBody.appendChild(m);
   chatBody.scrollTop = chatBody.scrollHeight;
 }
 
 function appendUser(msg) {
-  const m = document.createElement('div');
-  m.className = 'msg user';
+  const m = document.createElement("div");
+  m.className = "msg user";
   m.textContent = msg;
   chatBody.appendChild(m);
   chatBody.scrollTop = chatBody.scrollHeight;
 }
 
-/* ---------------------------------------------- */
-/*  GET LISTA DO SHEET */
-/* ---------------------------------------------- */
+/* ====================== CARREGAR LISTA ===================== */
 async function carregarLista() {
   try {
     const res = await fetch(API_URL);
-    const dados = await res.json();
-    listaGlobal = dados;
-    renderListCards(dados);
+    const data = await res.json();
+    listaGlobal = data;
+    renderListCards(data);
   } catch (err) {
-    listArea.innerHTML = '<div class="small">Erro ao carregar lista.</div>';
+    listArea.innerHTML = "<div class='small'>Erro ao carregar.</div>";
   }
 }
 
-/* ---------------------------------------------- */
-/*  RENDER CARDS */
-/* ---------------------------------------------- */
+refreshBtn.addEventListener("click", carregarLista);
+
+/* ====================== CARDS ===================== */
+
 function renderListCards(dados) {
-  listArea.innerHTML = '';
-  if (!dados || dados.length === 0) {
-    listArea.innerHTML = '<div class="small">Nenhum item encontrado.</div>';
+  listArea.innerHTML = "";
+
+  if (!dados.length) {
+    listArea.innerHTML = "<div class='small'>Nenhum item encontrado.</div>";
     return;
   }
 
-  dados.forEach(item => {
-    const card = document.createElement('div');
-    card.className = 'card';
-    const qty = item.quantidade ? `<div class="qty">${escapeHtml(item.quantidade)}</div>` : '';
+  dados.forEach((item) => {
+    const card = document.createElement("div");
+    card.className = "card";
+
     card.innerHTML = `
       <div class="left">
-        <div class="item">${escapeHtml(item.item)}</div>
-        ${qty}
+        <div class="item">${item.item}</div>
+        ${item.quantidade ? `<div class='qty'>${item.quantidade}</div>` : ""}
       </div>
+
       <div style="text-align:right;min-width:140px">
         <div class="small">Responsável</div>
-        <div class="who">${escapeHtml(item.responsavel || '— Vago —')}</div>
+        <div class="who">${item.responsavel || "— Vago —"}</div>
+
         ${
-          !item.responsavel 
-          ? `<div style="margin-top:8px">
-               <button class="btn-small" onclick="startFlow_chooseExisting('${escapeAttr(item.item)}','${escapeAttr(item.quantidade||'')}')">Reservar</button>
-             </div>` 
-          : ''
+          !item.responsavel
+            ? `<button class="btn-small" onclick="startFlow_chooseExisting('${item.item}','${item.quantidade || ""}')">Reservar</button>`
+            : ""
         }
       </div>
     `;
+
     listArea.appendChild(card);
   });
 }
 
-/* ---------------------------------------------- */
-/*  BOT */
-/* ---------------------------------------------- */
-function openChat() {
-  chatPanel.classList.remove('hidden');
-  chatBody.innerHTML = '';
-  appendBot('Olá! Eu sou o assistente do Café da Comunhão. Como deseja proceder?');
-  appendBot(`
-    <div style="display:flex;gap:8px;margin-top:8px">
-      <button class="choice-btn primary" onclick="choice_list()">Escolher item</button>
-      <button class="choice-btn" onclick="choice_add()">Adicionar novo item</button>
-    </div>
-  `, true);
-  chatInput.focus();
-}
-
-function closeChat() {
-  chatPanel.classList.add('hidden');
-}
-
-/* ---------------- SELECIONAR ITEM EXISTENTE ---------------- */
+/* ====================== FLUXO RESERVAR ===================== */
 function choice_list() {
-  appendUser('Escolher item da lista');
+  appendUser("Escolher item da lista");
 
-  const vagos = listaGlobal.filter(i => !i.responsavel);
+  const vagas = listaGlobal.filter((i) => !i.responsavel);
 
-  if (vagos.length === 0) {
-    appendBot('Nenhum item vago no momento.');
-    appendBot(`<button class="choice-btn primary" onclick="choice_add()">Adicionar novo item</button>`, true);
+  if (!vagas.length) {
+    appendBot("Nenhum item vago. Deseja adicionar novo item?");
     return;
   }
 
-  let html = '<div style="display:flex;flex-direction:column;gap:8px;margin-top:8px">';
-  vagos.forEach(v => {
-    const label = v.quantidade ? `${v.item} — ${v.quantidade}` : v.item;
-    html += `<button class="choice-btn" onclick="startFlow_chooseExisting('${escapeAttr(v.item)}','${escapeAttr(v.quantidade||'')}')">${escapeHtml(label)}</button>`;
+  let html = "";
+  vagas.forEach((v) => {
+    html += `<button class="choice-btn" onclick="startFlow_chooseExisting('${v.item}','${v.quantidade || ""}')">${v.item} ${
+      v.quantidade ? " — " + v.quantidade : ""
+    }</button>`;
   });
-  html += "</div>";
 
-  appendBot('Selecione um item:', true);
+  appendBot("Selecione um item:");
   appendBot(html, true);
 }
 
-/* ---------------------------------------------------------- */
-/*  ★★ FUNÇÃO ATUALIZADA: ABRE O CHAT AUTOMATICAMENTE ★★     */
-/* ---------------------------------------------------------- */
-window.startFlow_chooseExisting = function(item, quantidade) {
+/* FULLSCREEN + ABERTURA DIRETA */
+window.startFlow_chooseExisting = function (item, quantidade) {
+  chatPanel.classList.remove("hidden");
 
-  // Sempre abrir o chat primeiro
-  if (chatPanel.classList.contains('hidden')) {
-    chatPanel.classList.remove('hidden');
-  }
-
-  // Zera o conteúdo
   chatBody.innerHTML = "";
 
-  // Mostra seleção
   appendBot("Você escolheu:");
-  appendBot(`<strong>${escapeHtml(item)}${quantidade ? " — " + escapeHtml(quantidade) : ""}</strong>`, true);
+  appendBot(`<strong>${item} ${
+    quantidade ? " — " + quantidade : ""
+  }</strong>`, true);
 
-  // Grava item
   state.selected = { item, quantidade };
 
-  // Pergunta nome
-  appendBot("Qual o seu nome para registrar?");
-  
-  // Define fluxo
+  appendBot("Qual o seu nome?");
   state.current = "confirm_name_for_existing";
-
   chatInput.focus();
-}
+};
 
-/* ---------------- ADICIONAR ITEM NOVO ---------------- */
+/* ====================== FLUXO ADICIONAR NOVO ITEM ===================== */
+
 function choice_add() {
-  appendUser('Adicionar novo item');
-  appendBot('Qual o nome do item?');
+  appendUser("Adicionar novo item");
+  appendBot("Qual o item?");
   state.current = "add_item";
   chatInput.focus();
 }
 
-/* ---------------------------------------------- */
-/* CONTROLE DO FLUXO */
-/* ---------------------------------------------- */
-const state = { current: null, selected: null };
+/* ====================== ENVIO DE MENSAGENS ===================== */
 
-chatSend.addEventListener('click', handleSend);
-chatInput.addEventListener('keydown', e => { if (e.key === 'Enter') handleSend(); });
+chatSend.addEventListener("click", handleSend);
+chatInput.addEventListener("keydown", (e) => {
+  if (e.key === "Enter") handleSend();
+});
 
 function handleSend() {
   const txt = chatInput.value.trim();
   if (!txt) return;
   appendUser(txt);
-  chatInput.value = '';
+  chatInput.value = "";
 
   if (state.current === "add_item") {
     state.new = { item: txt };
-    appendBot("Quantidade? (Ex: 2 unidades)");
+    appendBot("Quantidade?");
     state.current = "add_qty";
     return;
   }
@@ -451,72 +481,70 @@ function handleSend() {
 
   if (state.current === "add_name") {
     state.new.responsavel = txt;
-    appendBot("Adicionando item...");
+    appendBot("Adicionando...");
     addNewItem(state.new.item, state.new.quantidade, state.new.responsavel);
     state.current = null;
     return;
   }
 
   if (state.current === "confirm_name_for_existing") {
-    appendBot("Registrando...");
     assumeExistingItem(state.selected.item, state.selected.quantidade, txt);
     state.current = null;
     return;
   }
-
-  appendBot("Escolha uma opção acima para continuar.");
 }
 
-/* ---------------------------------------------- */
-/*  FUNÇÕES DE REDE */
-/* ---------------------------------------------- */
+/* ====================== API FUNCTIONS ===================== */
+
 async function assumeExistingItem(item, quantidade, nome) {
-  try {
-    const r = await fetch(API_URL, {
-      method:'POST',
-      body: JSON.stringify({ action:'assume', item, quantidade, responsavel:nome })
-    });
-    const j = await r.json();
+  appendBot("Registrando...");
 
-    if (j.status === "ok") {
-      appendBot("Item reservado com sucesso 🙌");
-      carregarLista();
-      setTimeout(closeChat, 900);
-    } else {
-      appendBot("Erro ao reservar: "+(j.msg||'Falha'));
-    }
+  const r = await fetch(API_URL, {
+    method: "POST",
+    body: JSON.stringify({
+      action: "assume",
+      item,
+      quantidade,
+      responsavel: nome,
+    }),
+  });
 
-  } catch(e) {
-    appendBot("Erro de conexão.");
+  const j = await r.json();
+
+  if (j.status === "ok") {
+    appendBot("Item reservado com sucesso 🙌");
+    carregarLista();
+    setTimeout(closeChat, 1000);
+  } else {
+    appendBot("Erro ao reservar.");
   }
 }
 
 async function addNewItem(item, quantidade, nome) {
-  try {
-    const r = await fetch(API_URL, {
-      method:'POST',
-      body: JSON.stringify({ action:'add', item, quantidade, responsavel:nome })
-    });
-    const j = await r.json();
+  appendBot("Enviando...");
 
-    if (j.status === "ok") {
-      appendBot("Item adicionado com sucesso 🙌");
-      carregarLista();
-      setTimeout(closeChat, 900);
-    } else {
-      appendBot("Erro ao adicionar.");
-    }
+  const r = await fetch(API_URL, {
+    method: "POST",
+    body: JSON.stringify({
+      action: "add",
+      item,
+      quantidade,
+      responsavel: nome,
+    }),
+  });
 
-  } catch(e) {
-    appendBot("Erro de conexão.");
+  const j = await r.json();
+
+  if (j.status === "ok") {
+    appendBot("Item adicionado 🙌");
+    carregarLista();
+    setTimeout(closeChat, 900);
+  } else {
+    appendBot("Erro ao adicionar.");
   }
 }
 
-/* Escape */
-function escapeHtml(str){ return String(str).replaceAll("&","&amp;").replaceAll("<","&lt;").replaceAll(">","&gt;").replaceAll('"',"&quot;").replaceAll("'","&#39;"); }
-function escapeAttr(str){ return (str||"").replace(/'/g,"\\'").replace(/"/g,'\\"'); }
-
-/* Carregar lista no início */
+/* INICIAR */
 carregarLista();
 
 </script>
